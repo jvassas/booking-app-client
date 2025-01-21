@@ -1,75 +1,75 @@
 export const providers = [
-    {
-        id: "10",
-        firstName: "John",
-        lastName: "Dutton",
-        username: "jdutton1",
-        pw: "",
-    },
-    {
-        id: "20",
-        firstName: "Tommy",
-        lastName: "Shelby",
-        username: "tshelb",
-        pw: "",
-    },
-    {
-        id: "30",
-        firstName: "Marty",
-        lastName: "Byrde",
-        username: "byrdem",
-        pw: "",
-    },
-    {
-        id: "40",
-        firstName: "Claire",
-        lastName: "Underwood",
-        username: "underwoodclaire",
-        pw: "",
-    },
-    {
-        id: "50",
-        firstName: "Michael",
-        lastName: "Scott",
-        username: "michsc",
-        pw: "",
-    },
-    {
-        id: "60",
-        firstName: "Walter",
-        lastName: "White",
-        username: "walterw",
-        pw: "",
-    },
-    {
-        id: "70",
-        firstName: "Phil",
-        lastName: "Dunphy",
-        username: "pd12",
-        pw: "",
-    },
-    {
-        id: "80",
-        firstName: "Myles",
-        lastName: "Garrett",
-        username: "mgarrett95",
-        pw: "",
-    },
-    {
-        id: "90",
-        firstName: "Ruth",
-        lastName: "Langmore",
-        username: "rlang",
-        pw: "",
-    },
-    {
-        id: "100",
-        firstName: "Evan",
-        lastName: "Mobley",
-        username: "evmob4",
-        pw: "",
-    }
-]
+  {
+    providerId: "10",
+    firstName: "John",
+    lastName: "Dutton",
+    username: "jdutton1",
+    pw: "",
+  },
+  {
+    providerId: "20",
+    firstName: "Tommy",
+    lastName: "Shelby",
+    username: "tshelb",
+    pw: "",
+  },
+  {
+    providerId: "30",
+    firstName: "Marty",
+    lastName: "Byrde",
+    username: "byrdem",
+    pw: "",
+  },
+  {
+    providerId: "40",
+    firstName: "Claire",
+    lastName: "Underwood",
+    username: "underwoodclaire",
+    pw: "",
+  },
+  {
+    providerId: "50",
+    firstName: "Michael",
+    lastName: "Scott",
+    username: "michsc",
+    pw: "",
+  },
+  {
+    providerId: "60",
+    firstName: "Walter",
+    lastName: "White",
+    username: "walterw",
+    pw: "",
+  },
+  {
+    providerId: "70",
+    firstName: "Phil",
+    lastName: "Dunphy",
+    username: "pd12",
+    pw: "",
+  },
+  {
+    providerId: "80",
+    firstName: "Myles",
+    lastName: "Garrett",
+    username: "mgarrett95",
+    pw: "",
+  },
+  {
+    providerId: "90",
+    firstName: "Ruth",
+    lastName: "Langmore",
+    username: "rlang",
+    pw: "",
+  },
+  {
+    providerId: "100",
+    firstName: "Evan",
+    lastName: "Mobley",
+    username: "evmob4",
+    pw: "",
+  },
+];
 
 // import React, { useContext, useEffect, useState } from "react";
 // import { useParams } from "react-router-dom";
@@ -171,6 +171,3 @@ export const providers = [
 // };
 
 // export default Appointment;
-
-
-

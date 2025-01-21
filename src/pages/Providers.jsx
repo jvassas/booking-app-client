@@ -1,19 +1,26 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
 const Providers = () => {
-  const { providers } = useContext(AppContext);
   const navigate = useNavigate();
+
+  const { providers, getProviders } = useContext(AppContext);
+
+  useEffect(() => {
+    getProviders;
+  });
 
   return (
     <div>
-      <h1 className="sm:ml-50 sm:pl-4 mt-4 font-medium text-3xl text-gray-700">List of Providers</h1>
+      <h1 className="sm:ml-50 sm:pl-4 mt-4 font-medium text-3xl text-gray-700">
+        List of Providers
+      </h1>
       <div>
         <div className="w-full grid grid-cols-auto gap-4 pt-5 gap-y-6 px-3 sm:px-0">
           {providers.slice(0, 10).map((item, index) => (
             <div
-              onClick={() => navigate(`/appointment/${item.id}`)}
+              onClick={() => navigate(`/appointment/${item.providerId}`)}
               className="border border-black-400 overflow-hidden cursor-pointer hover:translate-y-[10px] transition-all"
               key={index}
             >

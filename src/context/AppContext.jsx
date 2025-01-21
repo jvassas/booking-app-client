@@ -1,20 +1,45 @@
-import { createContext } from "react";
-import { providers } from "../assets/assets";
+import { createContext, useEffect, useState } from "react";
+// import { providers } from "../assets/assets";
+import axios from "axios";
 
-export const AppContext = createContext()
+export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const [token, setToken] = useState("");
+  const [providers, setProviders] = useState(
+    localStorage.getItem("token") ? localStorage.getItem("token") : false
+  );
 
-    const value = {
-        providers
+  const getProviders = async () => {
+    try {
+      const { data } = await axios.post(
+        backendURL + "/api/helper/get-providers",
+        {}
+      );
+      if (data.success) {
+        setProviders(data.providers);
+        console.log(data.providers);
+      }
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    return(
+  const value = {
+    providers,
+    getProviders,
+    token,
+    setToken,
+    backendURL,
+  };
 
-        <AppContext.Provider value={value}>
-            {props.children}
-        </AppContext.Provider>
-    )
-}
+  useEffect(() => {
+    getProviders();
+  }, []);
+  return (
+    <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
+  );
+};
 
-export default AppContextProvider
+export default AppContextProvider;
