@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [state, setState] = useState("Sign Up");
+  const [state, setState] = useState("Register");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -15,32 +15,28 @@ const Login = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    try {
-      if (state === "Sign Up") {
-        const { data } = await axios.post(
-          `${backendURL}/api/client/register-client`,
-          { firstName, lastName, email, password }
-        );
-        if (data.success) {
-          localStorage.setItem("token", data.token);
-          setToken(data.token);
-        } else {
-          throw new Error("Registration Failed");
-        }
+    if (state === "Register") {
+      const { data } = await axios.post(
+        `${backendURL}/api/client/register-client`,
+        { firstName, lastName, email, password }
+      );
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        setToken(data.token);
       } else {
-        const { data } = await axios.post(`${backendURL}/api/client/login`, {
-          email,
-          password,
-        });
-        if (data.success) {
-          localStorage.setItem("token", data.token);
-          setToken(data.token);
-        } else {
-          throw new Error("Login Failed");
-        }
+        throw new Error("Registration Failed");
       }
-    } catch (error) {
-      console.error("Error during authentication:", error.message);
+    } else {
+      const { data } = await axios.post(`${backendURL}/api/client/login`, {
+        email,
+        password,
+      });
+      if (data.success) {
+        localStorage.setItem("token", data.token);
+        setToken(data.token);
+      } else {
+        throw new Error("Login Failed");
+      }
     }
   };
 
@@ -57,13 +53,13 @@ const Login = () => {
     >
       <div className="flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-black text-sm shadow-lg">
         <p className="text-2xl font-semibold">
-          {state === "Sign Up" ? "Register" : "Login"}
+          {state === "Register" ? "Register" : "Login"}
         </p>
         <p>
           To book an appointment, please{" "}
-          {state === "Sign Up" ? "register" : "login"}.
+          {state === "Register" ? "register" : "login"}.
         </p>
-        {state === "Sign Up" && (
+        {state === "Register" ? (
           <div className="w-full">
             <p>First Name</p>
             <input
@@ -82,7 +78,7 @@ const Login = () => {
               required
             />
           </div>
-        )}
+        ) : null}
 
         <div className="w-full">
           <p>Email</p>
@@ -105,9 +101,9 @@ const Login = () => {
           />
         </div>
         <button className="bg-primary text-white px-8 rounded-full text-sm my-4 px-10 py-2 hidden md:block">
-          {state === "Sign Up" ? "Register" : "Login"}
+          {state === "Register" ? "Register" : "Login"}
         </button>
-        {state === "Sign Up" ? (
+        {state === "Register" ? (
           <p>
             <span
               onClick={() => setState("Login")}
@@ -119,7 +115,7 @@ const Login = () => {
         ) : (
           <p>
             <span
-              onClick={() => setState("Sign Up")}
+              onClick={() => setState("Register")}
               className="cursor-pointer underline"
             >
               Create a new Account?

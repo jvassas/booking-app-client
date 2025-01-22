@@ -4,8 +4,7 @@ import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const Nav = () => {
-  const [showMenu, setShowMenu] = useState(false);
-  const { token, setToken } = useContext(AppContext);
+  const { token, setToken, clientData } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -18,7 +17,7 @@ const Nav = () => {
   return (
     <div>
       {/* Show navigation only if token is true */}
-      {token && (
+      {token && clientData ? (
         <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
           <ul className="hidden md:flex items-start gap-5 font-medium">
             <NavLink to="/">
@@ -47,6 +46,11 @@ const Nav = () => {
             </p>
           </ul>
         </div>
+      ) : (
+        <button
+          onClick={() => navigate("/login")}
+          className="bg-primary text-white px-8 rounded-full font-light hidden md:block"
+        ></button>
       )}
     </div>
   );

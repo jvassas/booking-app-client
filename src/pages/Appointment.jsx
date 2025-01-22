@@ -7,7 +7,7 @@ const Appointment = () => {
   const { providerId } = useParams(); // Get ID from the URL
   const { providers, token, getProviders, backendURL } = useContext(AppContext); // Get providers from context
 
-  const [providerInfo, setProviderInfo] = useState(null);
+  const [providerInfo, setProviderInfo] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
 
   const [providerOpenings, setProviderOpenings] = useState([]);
@@ -35,6 +35,10 @@ const Appointment = () => {
       getOpenings();
     }
   }, [providerInfo]);
+
+  useEffect(() => {
+    console.log("Token from context:", token);
+  }, [token]);
 
   const getOpenings = async () => {
     setProviderOpenings([]); // Reset openings before populating
@@ -79,37 +83,34 @@ const Appointment = () => {
       return navigate("/login");
     }
 
+    const date = providerOpenings[openingIndex][0].dateTime;
+    let day = date.getDate(); // Corrected this line to get the date of the month
+    let month = date.getMonth() + 1; // Month is zero-based, so add 1
+    let year = date.getFullYear();
+
+    const openingDate = `${day}_${month}_${year}`; // Use template literals for consistency
+    console.log({ providerId, openingDate, openingTime });
+
     try {
-      const selectedSlot = providerOpenings[openingIndex][0]; // Select the first slot of the current day's openings
-
-      if (!selectedSlot || !openingTime) {
-        console.log("No slot selected or no time chosen");
-        return;
-      }
-
-      const date = selectedSlot.dateTime;
-
-      let day = date.getDate();
-      let month = date.getMonth() + 1;
-      let year = date.getFullYear();
-
-      const slotDate = `${day}_${month}_${year}`;
-      const slotTime = openingTime; // Use the selected opening time
-
       const { data } = await axios.post(
-        backendURL + "/api/client/book-appointment",
-        { providerId, slotDate, slotTime }
+        `${backendURL}/api/client/book-appointment`, // Ensure URL is correct
+        { providerId, openingDate, openingTime }, // Request body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include 'Bearer ' prefix if required
+          },
+        }
       );
 
       if (data.success) {
-        console.log(data.message);
+        console.log("SUCCESS");
         getProviders();
-        navigate("/my-appointment");
+        navigate("/my-appointments");
       } else {
-        console.log(data.message);
+        console.log("ERROR: " + data.message);
       }
     } catch (error) {
-      console.error("Error booking appointment:", error);
+      console.log(error.message);
     }
   };
 

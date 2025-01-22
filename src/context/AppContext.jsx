@@ -1,15 +1,15 @@
 import { createContext, useEffect, useState } from "react";
-// import { providers } from "../assets/assets";
 import axios from "axios";
 
 export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
   const backendURL = import.meta.env.VITE_BACKEND_URL;
-  const [token, setToken] = useState("");
-  const [providers, setProviders] = useState(
-    localStorage.getItem("token") ? localStorage.getItem("token") : false
+  const [token, setToken] = useState(
+    localStorage.getItem("token") ? localStorage.getItem("token") : ""
   );
+  const [providers, setProviders] = useState([]);
+  const [clientData, setClientData] = useState(false);
 
   const getProviders = async () => {
     try {
@@ -26,17 +26,20 @@ const AppContextProvider = (props) => {
     }
   };
 
+  useEffect(() => {
+    getProviders();
+  }, []);
+
   const value = {
     providers,
     getProviders,
     token,
     setToken,
     backendURL,
+    clientData,
+    setClientData,
   };
 
-  useEffect(() => {
-    getProviders();
-  }, []);
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
   );
