@@ -4,30 +4,27 @@ import { AppContext } from "../context/AppContext";
 import axios from "axios";
 
 const Appointment = () => {
-  const { providerId } = useParams(); // Get ID from the URL
-  const { providers, token, getProviders, backendURL } = useContext(AppContext); // Get providers from context
+  const { providerId } = useParams();
+  const { providers, token, getProviders, backendURL } = useContext(AppContext);
 
   const [providerInfo, setProviderInfo] = useState(false);
-  const [loading, setLoading] = useState(true); // Loading state
-
+  const [loading, setLoading] = useState(true);
   const [providerOpenings, setProviderOpenings] = useState([]);
-  const [openingIndex, setOpeningIndex] = useState(0); // Add this state to track the selected index
-
+  const [openingIndex, setOpeningIndex] = useState(0);
   const [openingTime, setOpeningTime] = useState(null);
 
-  const daysOfWeek = ["SUN", "MON", "TUES", "WED", "THURS", "FRI", "SAT"];
+  const [showModal, setShowModal] = useState(false); // Modal state
+  const [confirmationLoading, setConfirmationLoading] = useState(false); // Loading state for modal confirmation
 
+  const daysOfWeek = ["SUN", "MON", "TUES", "WED", "THURS", "FRI", "SAT"];
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Captured ID from URL:", providerId);
-    console.log("Providers from Context:", providers);
-
     if (providers && providerId) {
       const provider = providers.find((p) => p.providerId === providerId);
       setProviderInfo(provider || null);
     }
-    setLoading(false); // Set loading to false after attempting to fetch
+    setLoading(false);
   }, [providers, providerId]);
 
   useEffect(() => {
@@ -36,12 +33,8 @@ const Appointment = () => {
     }
   }, [providerInfo]);
 
-  useEffect(() => {
-    console.log("Token from context:", token);
-  }, [token]);
-
   const getOpenings = async () => {
-    setProviderOpenings([]); // Reset openings before populating
+    setProviderOpenings([]);
     const today = new Date();
 
     for (let i = 0; i < 7; i++) {
@@ -52,7 +45,6 @@ const Appointment = () => {
       endTime.setDate(today.getDate() + i);
       endTime.setHours(17, 0, 0, 0);
 
-      // Set start time to 8 AM for all days
       currentDt.setHours(8);
       currentDt.setMinutes(0);
 
@@ -68,49 +60,59 @@ const Appointment = () => {
           time: formattedTime,
         });
 
-        // Set 15 min intervals
         currentDt.setMinutes(currentDt.getMinutes() + 15);
       }
 
       setProviderOpenings((prev) => [...prev, openings]);
-      console.log(openings);
     }
   };
 
-  const bookAppointment = async () => {
+  const handleReserveClick = () => {
     if (!token) {
-      console.log("Login to book");
-      return navigate("/login");
+      navigate("/login");
+      return;
     }
 
+    if (!openingTime) {
+      alert("Please select a time before reserving.");
+      return;
+    }
+
+    setShowModal(true); // Show confirmation modal
+  };
+
+  const confirmReservation = async () => {
+    setConfirmationLoading(true);
     const date = providerOpenings[openingIndex][0].dateTime;
-    let day = date.getDate(); // Corrected this line to get the date of the month
-    let month = date.getMonth() + 1; // Month is zero-based, so add 1
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
     let year = date.getFullYear();
 
-    const openingDate = `${day}_${month}_${year}`; // Use template literals for consistency
-    console.log({ providerId, openingDate, openingTime });
+    const openingDate = `${day}_${month}_${year}`;
 
     try {
       const { data } = await axios.post(
-        `${backendURL}/api/client/book-appointment`, // Ensure URL is correct
-        { providerId, openingDate, openingTime }, // Request body
+        `${backendURL}/api/client/book-appointment`,
+        { providerId, openingDate, openingTime },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include 'Bearer ' prefix if required
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (data.success) {
-        console.log("SUCCESS");
+        alert("Appointment successfully booked!");
         getProviders();
         navigate("/my-appointments");
       } else {
-        console.log("ERROR: " + data.message);
+        alert(`Error: ${data.message}`);
       }
     } catch (error) {
-      console.log(error.message);
+      alert("An error occurred while booking the appointment.");
+    } finally {
+      setConfirmationLoading(false);
+      setShowModal(false);
     }
   };
 
@@ -132,11 +134,11 @@ const Appointment = () => {
       </p>
       <div className="sm:ml-50 sm:pl-4 mt-4 font-medium text-gray-700">
         <h2>Days</h2>
-        <div className="flex gap-5 items center w-full mt-4">
+        <div className="flex gap-5 items-center w-full mt-4">
           {providerOpenings.length &&
             providerOpenings.map((item, index) => (
               <div
-                className={`text-center py-5 min-w-16 rounded-md cursor-pointer ${
+                className={`text-center py-5 min-w-16 rounded-md cursor-pointer shadow-lg	 ${
                   openingIndex === index
                     ? "bg-primary text-white"
                     : "border border-gray-200"
@@ -156,26 +158,56 @@ const Appointment = () => {
           {providerOpenings.length &&
             providerOpenings[openingIndex].map((item, index) => (
               <p
-                onClickCapture={() => setOpeningTime(item.time)}
-                className={`text-md font-semibold flex-shrink-0 px-1 py-2 rounded-md cursor-pointer  ${
+                onClick={() => setOpeningTime(item.time)}
+                className={`text-md font-semibold flex-shrink-0 px-1 py-2 rounded-md cursor-pointer shadow-lg	 ${
                   item.time === openingTime
                     ? "bg-primary text-white"
                     : "text-black-400 border border-gray-400"
                 }`}
                 key={index}
-                onClick={() => setOpeningTime(item.time)} // Update the selected opening time
               >
                 {item.time.toLowerCase()}
               </p>
             ))}
         </div>
         <button
-          onClick={bookAppointment}
+          onClick={handleReserveClick}
           className="bg-primary text-white px-8 rounded-full text-sm my-10 px-10 py-2 md:block"
         >
-          Book Appointment
+          Reserve Appointment
         </button>
       </div>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded shadow-lg text-center">
+            <h2 className="text-xl font-semibold mb-4">
+              Confirm Appointment Reservation
+            </h2>
+            <p className="mb-4">
+              Are you sure you want to reserve this appointment?
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setShowModal(false)}
+                className="bg-gray-300 px-4 py-2 border rounded hover:bg-white hover:text-red-500 hover:border-red-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmReservation}
+                className={`bg-primary text-white px-4 py-2 border rounded hover:bg-white hover:text-primary hover:border-primary ${
+                  confirmationLoading ? "opacity-50" : ""
+                }`}
+                disabled={confirmationLoading}
+              >
+                {confirmationLoading ? "Confirming..." : "Confirm"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

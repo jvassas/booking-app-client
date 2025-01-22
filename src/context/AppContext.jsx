@@ -40,6 +40,10 @@ const AppContextProvider = (props) => {
     setClientData,
   };
 
+  useEffect(() => {
+    console.log("Token from localStorage:", token);
+  }, [token]);
+
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
   );

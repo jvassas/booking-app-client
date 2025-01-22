@@ -1,31 +1,22 @@
-import React from "react";
-// STYLE THIS
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+
 const Header = () => {
+  const navigate = useNavigate();
+  const { token } = useContext(AppContext);
+
   return (
     <div>
-      {/* Left Side */}
       <div>
-        <p className="text-2xl px-8 my-5">
-          {" "}
-          Reserve appointments with providers
-        </p>
-        <div>
-          {/* <img src={}/> */}
-          <p className="text-md px-8 my-5">
-            Look through the list of providers and schedule your appointment
-            today
+        <div className="sm:ml-50 sm:pl-4 mt-4 text-center font-medium text-gray-700">
+          <p className="text-4xl px-8 my-5 mx-auto"> The Appointment Hub</p>
+
+          <p className="text-lg px-8 my-5 mx-auto">
+            Find & Book Today: Login or Register to Explore Our Provider Network
           </p>
         </div>
-        {/* <div className="flex items-center gap-4">
-        <a href="" className="px-8 my-5 bg-primary text-white px-8 my-10 rounded-full font-light hidden md:block">
-            Book Appointment
-        </a>
-        </div> */}
       </div>
-
-      {/* Right Side */}
-
-      <div></div>
     </div>
   );
 };
