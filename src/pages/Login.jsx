@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [state, setState] = useState("Register");
+  const [state, setState] = useState("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -100,7 +100,7 @@ const Login = () => {
             required
           />
         </div>
-        <button className="bg-primary text-white px-8 rounded-full text-sm my-4 px-10 py-2 hidden md:block">
+        <button className="bg-primary text-black px-8 rounded-full text-sm my-4 px-10 py-2 hidden md:block">
           {state === "Register" ? "Register" : "Login"}
         </button>
         {state === "Register" ? (

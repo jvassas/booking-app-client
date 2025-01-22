@@ -19,7 +19,6 @@ const AppContextProvider = (props) => {
       );
       if (data.success) {
         setProviders(data.providers);
-        console.log(data.providers);
       }
     } catch (error) {
       console.log(error);
@@ -39,10 +38,6 @@ const AppContextProvider = (props) => {
     clientData,
     setClientData,
   };
-
-  useEffect(() => {
-    console.log("Token from localStorage:", token);
-  }, [token]);
 
   return (
     <AppContext.Provider value={value}>{props.children}</AppContext.Provider>

@@ -10,7 +10,7 @@ const Header = () => {
     <div>
       <div>
         <div className="sm:ml-50 sm:pl-4 mt-4 text-center font-medium text-gray-700">
-          <p className="text-4xl px-8 my-5 mx-auto"> The Appointment Hub</p>
+          <p className="text-4xl px-8 my-5 mx-auto">Appointment Hub</p>
 
           <p className="text-lg px-8 my-5 mx-auto">
             Find & Book Today: Login or Register to Explore Our Provider Network

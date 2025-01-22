@@ -23,7 +23,7 @@ const ProviderCard = () => {
             >
               {/* Random doctor image */}
               <div className="p-4">
-                <div className="flex items-center gap-2 text-md text-center text-gray-800">
+                <div className="flex items-center gap-2 text-lg text-center text-gray-800">
                   <p>
                     Dr. {item.firstName} {item.lastName}
                   </p>
@@ -40,7 +40,7 @@ const ProviderCard = () => {
           navigate("/providers");
           scrollTo(0, 0);
         }}
-        className="bg-primary text-black px-8 border-black rounded-md shadow-lg font-light hidden md:block"
+        className="bg-primary text-black px-8 rounded-full text-sm my-4 px-10 py-2 hidden md:block"
       >
         All Providers
       </button>

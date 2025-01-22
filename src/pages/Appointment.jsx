@@ -109,7 +109,7 @@ const Appointment = () => {
         alert(`Error: ${data.message}`);
       }
     } catch (error) {
-      alert("An error occurred while booking the appointment.");
+      alert("This time is unavailable");
     } finally {
       setConfirmationLoading(false);
       setShowModal(false);
@@ -172,7 +172,7 @@ const Appointment = () => {
         </div>
         <button
           onClick={handleReserveClick}
-          className="bg-primary text-white px-8 rounded-full text-sm my-10 px-10 py-2 md:block"
+          className="bg-primary text-black px-8 rounded-full text-sm my-10 px-10 py-2 md:block"
         >
           Reserve Appointment
         </button>
